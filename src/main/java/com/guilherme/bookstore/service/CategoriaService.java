@@ -2,6 +2,7 @@ package com.guilherme.bookstore.service;
 
 import com.guilherme.bookstore.domain.Categoria;
 import com.guilherme.bookstore.dtos.CategoriaDto;
+import com.guilherme.bookstore.service.exceptions.DataIntegrityViolationException;
 import com.guilherme.bookstore.service.exceptions.ObjectNotFoundException;
 import com.guilherme.bookstore.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,16 @@ public class CategoriaService {
         categoria.setNome(categoriaDto.getNome());
         categoria.setDescricao(categoriaDto.getDescricao());
         return categoriaRepository.save(categoria);
+    }
+
+    public void delete(Integer id) {
+        findById(id);
+        try {
+            categoriaRepository.deleteById(id);
+        }catch (org.springframework.dao.DataIntegrityViolationException e){
+            throw  new DataIntegrityViolationException("Objeto não pode ser deletada! Possui livros associados");
+        }
+
+
     }
 }
