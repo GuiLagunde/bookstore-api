@@ -41,4 +41,11 @@ public class LivrosService {
         newObj.setNome_autor(obj.getNome_autor());
         newObj.setTexto(obj.getTexto());
     }
+
+    public Livro create(Integer idCat, Livro obj) {
+        obj.setId(null);
+        Categoria cat = categoriaService.findById(idCat);
+        obj.setCategoria(cat);
+        return livroRepository.save(obj);
+    }
 }
